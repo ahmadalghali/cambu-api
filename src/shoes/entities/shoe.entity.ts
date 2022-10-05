@@ -1,3 +1,4 @@
+import { ShoeSizeStock } from './shoe-size-stock.entity';
 import {
   Column,
   Entity,
@@ -7,9 +8,12 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { ShoeCategory } from './shoe-category.entity';
-import { ShoeSize } from './shoe-size.entity';
 
+enum Category {
+  Running = 'RUNNING',
+  Walking = 'Walking',
+  Formal = 'FORMAL',
+}
 @Entity()
 export class Shoe {
   @PrimaryGeneratedColumn()
@@ -21,13 +25,14 @@ export class Shoe {
   @Column()
   price: number;
 
-  @Column('simple-array')
-  images: string[];
+  @Column()
+  image: string;
 
-  @ManyToOne(() => ShoeCategory, (category) => category.shoes)
-  category: ShoeCategory;
+  @Column({ type: 'enum', enum: Category })
+  category: Category;
 
-  @ManyToMany(() => ShoeSize)
-  @JoinTable()
-  sizes: ShoeSize[];
+  @OneToMany(() => ShoeSizeStock, (shoeSizeStock) => shoeSizeStock.shoe, {
+    eager: true,
+  })
+  details: ShoeSizeStock;
 }

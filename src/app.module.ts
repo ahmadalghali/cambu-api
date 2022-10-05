@@ -1,3 +1,5 @@
+import { ShoeSizeStock } from './shoes/entities/shoe-size-stock.entity';
+import { AppUser } from './app-user/entities/app-user.entity';
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -5,10 +7,10 @@ import { ShoesModule } from './shoes/shoes.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Shoe } from './shoes/entities/shoe.entity';
 import { ShoeCategory } from './shoes/entities/shoe-category.entity';
-import { ShoeSize } from './shoes/entities/shoe-size.entity';
-import { AppUser } from './shoes/entities/app-user.entity';
-import { FavouritesList } from './shoes/entities/favourites-list.entity';
+import { Size } from './shoes/entities/size.entity';
 import { ConfigModule } from '@nestjs/config';
+import { AppUserModule } from './app-user/app-user.module';
+import { ShoeDetails } from './shoes/entities/shoe-details.entity';
 
 @Module({
   imports: [
@@ -17,16 +19,13 @@ import { ConfigModule } from '@nestjs/config';
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      // host: process.env.DB_HOST,
-      // port: +process.env.DB_PORT,
-      // username: process.env.DB_USERNAME,
-      // password: process.env.DB_PASSWORD,
-      // database: process.env.DATABASE,
       url: process.env.LOCAL_DATABASE_URL,
-      entities: [Shoe, ShoeCategory, ShoeSize, AppUser, FavouritesList],
+      entities: [Shoe, Size, AppUser, ShoeSizeStock],
       synchronize: true,
+      logging: false,
     }),
     ShoesModule,
+    AppUserModule,
   ],
   controllers: [AppController],
   providers: [AppService],
