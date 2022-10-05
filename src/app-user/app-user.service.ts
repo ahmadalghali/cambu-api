@@ -1,9 +1,22 @@
+import { LoginDto } from './../auth/dto/login.dto';
+import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
 import { CreateAppUserDto } from './dto/create-app-user.dto';
 import { UpdateAppUserDto } from './dto/update-app-user.dto';
+import { AppUser } from './entities/app-user.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class AppUserService {
+  constructor(
+    @InjectRepository(AppUser)
+    private userRepository: Repository<AppUser>,
+  ) {}
+
+  async register(createAppUserDto: CreateAppUserDto) {
+    return this.userRepository.save(createAppUserDto);
+  }
+
   create(createAppUserDto: CreateAppUserDto) {
     return 'This action adds a new appUser';
   }
@@ -13,7 +26,11 @@ export class AppUserService {
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} appUser`;
+    return this.userRepository.findOne({ where: { id } });
+  }
+
+  findByEmail(email: string) {
+    return this.userRepository.findOne({ where: { email } });
   }
 
   update(id: number, updateAppUserDto: UpdateAppUserDto) {
