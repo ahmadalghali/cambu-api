@@ -20,7 +20,11 @@ export class ShoesService {
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} shoe`;
+    return this.shoeRepository.findOne({
+      where: {
+        id,
+      },
+    });
   }
 
   update(id: number, updateShoeDto: UpdateShoeDto) {
