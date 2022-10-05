@@ -13,6 +13,9 @@ import { ConfigModule } from '@nestjs/config';
 import { AppUserModule } from './app-user/app-user.module';
 import { ShoeDetails } from './shoes/entities/shoe-details.entity';
 import { ShoppingBagModule } from './shopping-bag/shopping-bag.module';
+import { AuthModule } from './auth/auth.module';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthenticatedGuard } from './auth/guard/authenticated.guard';
 
 @Module({
   imports: [
@@ -29,8 +32,15 @@ import { ShoppingBagModule } from './shopping-bag/shopping-bag.module';
     ShoesModule,
     AppUserModule,
     ShoppingBagModule,
+    AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: AuthenticatedGuard,
+    },
+  ],
 })
 export class AppModule {}

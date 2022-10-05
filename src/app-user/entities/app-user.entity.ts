@@ -16,4 +16,10 @@ export class AppUser {
 
   @Column()
   lastname: string;
+
+  @Column()
+  email: string;
+
+  @Column()
+  password: string;
 }
